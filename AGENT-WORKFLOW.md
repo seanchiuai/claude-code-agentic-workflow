@@ -186,6 +186,7 @@ Mocking: {APIs, databases, etc.}
 **Persistent:**
 - `.claude/memory.md` - Current session context only
 - `workflow/tests/{project-type}-patterns.md` - Test patterns by project type
+- `workflow/docs/` - Project-specific best practices and API documentation
 
 **Checkpoints (during workflow, cleaned after task):**
 - `.workflow-checkpoint`

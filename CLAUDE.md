@@ -16,6 +16,11 @@ All workflow files must use these exact paths:
 **Test Pattern Library**
 - `workflow/tests/{project-type}-patterns.md` - Test patterns by project type (chrome-extension, react, express, python, etc.)
 
+**Project Documentation**
+- `workflow/docs/best-practices.md` - Project-specific coding standards and patterns
+- `workflow/docs/api-reference.md` - Internal API documentation
+- `workflow/docs/{domain}-guide.md` - Domain-specific implementation guides
+
 **Ephemeral Files (cleaned after task)**
 - `workflow/tmp/context-pool.json` - Shared context cache (400 tokens, 24h TTL)
 - `workflow/tmp/scout-results.md` - Consolidated codebase-search findings (800-2000 tokens)
@@ -318,10 +323,12 @@ If total > 1000 tokens: Prune oldest warm patterns
 - Known patterns and entry points
 - Dependencies and execution environment
 - Test infrastructure (framework, runner, config location)
+- Project documentation references (workflow/docs)
 
 **Usage:**
 - Sub-agents (codebase-search, execution-planner, test-generator, builders) load for shared context
 - test-generator skill reads project type to adapt test generation
+- Agents consult workflow/docs for project-specific patterns and API documentation
 - Prevents redundant discovery (~800 token savings per task)
 
 ### Execution Decision Tree
