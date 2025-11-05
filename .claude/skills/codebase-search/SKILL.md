@@ -4,7 +4,6 @@ description: "Parallel internal codebase search. Launches 2-4 search agents, con
 version: "1.0.0"
 dependencies: []
 allowed-tools: ["Task", "Read", "Write"]
-model: "haiku"
 ---
 
 # Codebase Search Skill
@@ -33,7 +32,7 @@ Launch Task agents in parallel using Task tool, each searching different domain:
 
 **Agent 1: Component/Feature Search**
 ```
-Task(subagent_type="general-purpose", model="haiku",
+Task(subagent_type="general-purpose",
      prompt="Search for [target] in component/feature files.
      Find: files to modify, patterns used, dependencies.
      Return findings as text (200-400 tokens).")
@@ -41,7 +40,7 @@ Task(subagent_type="general-purpose", model="haiku",
 
 **Agent 2: Logic/API/Service Search**
 ```
-Task(subagent_type="general-purpose", model="haiku",
+Task(subagent_type="general-purpose",
      prompt="Search for [target] in api/services/handlers.
      Find: files to modify, patterns used, dependencies.
      Return findings as text (200-400 tokens).")
@@ -49,7 +48,7 @@ Task(subagent_type="general-purpose", model="haiku",
 
 **Agent 3: Config/Test/Type Search**
 ```
-Task(subagent_type="general-purpose", model="haiku",
+Task(subagent_type="general-purpose",
      prompt="Search for [target] in config/test/type files.
      Find: patterns, test structure, type definitions.
      Return findings as text (200-400 tokens).")
@@ -57,7 +56,7 @@ Task(subagent_type="general-purpose", model="haiku",
 
 **Agent 4: Documentation/Examples** (optional, if needed)
 ```
-Task(subagent_type="general-purpose", model="haiku",
+Task(subagent_type="general-purpose",
      prompt="Search for [target] documentation, examples, comments.
      Find: usage patterns, conventions.
      Return findings as text (200-400 tokens).")

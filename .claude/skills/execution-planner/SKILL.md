@@ -4,7 +4,6 @@ description: "Transform codebase-search findings into phased execution plan. Cre
 version: "1.0.0"
 dependencies: []
 allowed-tools: ["Read", "Write", "Skill"]
-model: "sonnet"
 ---
 
 # Execution Planner Skill

@@ -4,7 +4,6 @@ description: "Test-Driven Development skill. Generates unit tests before impleme
 version: "1.0.0"
 dependencies: []
 allowed-tools: ["Read", "Write", "Glob", "Grep"]
-model: "sonnet"
 ---
 
 # Test Generator Skill

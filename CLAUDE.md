@@ -235,7 +235,7 @@ Execution-planner must specify:
 
 When execution-planner is already clear:
 ```
-Task(subagent_type="general-purpose", model="sonnet",
+Task(subagent_type="general-purpose",
      prompt="Implement X. Files: [specific paths]. Pattern: [specific approach]")
 ```
 
@@ -246,8 +246,11 @@ Use direct tasks when:
 
 #### 6. Model Selection Strategy
 
-- **haiku**: Codebase-search skill (fast search), simple edits, documentation
-- **sonnet**: Execution-planner skill (strategic thinking), core implementation, complex logic
+**Note:** Skills inherit model from parent context. Model selection controlled by user, not by skills/agents.
+
+General guidance (orchestrator-level only):
+- **haiku**: Fast search, simple edits, documentation
+- **sonnet**: Strategic thinking, core implementation, complex logic
 - **opus**: Very complex architectural decisions (rare)
 
 #### 7. Builder Coordination & Validation
