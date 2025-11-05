@@ -1,20 +1,3 @@
-# Claude Code Workflow - Ephemeral Files
-# Only ignore temporary workflow files, keep directory structure
-
-# Workflow ephemeral files (cleaned after each task)
-workflow/tmp/*
-!workflow/tmp/.gitkeep
-
-# Workflow checkpoints (cleaned after each task)
-# Git-based checkpoints
-.workflow-checkpoint
-.phase-checkpoint
-.build-checkpoint
-# Timestamp-based checkpoints (for non-git projects)
-.workflow-start
-.phase-start
-.build-start
-
 # OS-specific files
 .DS_Store
 Thumbs.db
