@@ -1,0 +1,44 @@
+# Claude Code Workflow - Ephemeral Files
+# Only ignore temporary workflow files, keep directory structure
+
+# Workflow ephemeral files (cleaned after each task)
+workflow/tmp/*
+!workflow/tmp/.gitkeep
+
+# Workflow checkpoints (cleaned after each task)
+# Git-based checkpoints
+.workflow-checkpoint
+.phase-checkpoint
+.build-checkpoint
+# Timestamp-based checkpoints (for non-git projects)
+.workflow-start
+.phase-start
+.build-start
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if applicable to projects using this template)
+node_modules/
+
+# Python (if applicable to projects using this template)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+
+# Build outputs (project-specific, add as needed)
+dist/
+build/
+*.log
