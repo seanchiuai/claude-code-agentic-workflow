@@ -234,6 +234,11 @@ workflow/
 │  ├─ react-patterns.md
 │  ├─ express-patterns.md
 │  └─ python-patterns.md
+├─ docs/                # Project-specific documentation
+│  ├─ README.md         # Documentation guide
+│  ├─ best-practices.md # Coding standards & patterns
+│  ├─ api-reference.md  # Internal API documentation
+│  └─ {domain}-guide.md # Domain-specific guides
 └─ tmp/                 # Ephemeral files (cleaned after task)
    ├─ context-pool.json # 24h TTL, project context
    ├─ scout-results.md  # Codebase-search findings
@@ -344,7 +349,7 @@ Checkpoints             # (cleaned after task)
 
 `workflow/tmp/context-pool.json` - Generated from memory + codebase. 24h TTL. ~400 tokens.
 
-**Contains:** Project type (CRITICAL for test-generator), tech stack, directory structure, test infrastructure
+**Contains:** Project type (CRITICAL for test-generator), tech stack, directory structure, test infrastructure, workflow/docs references
 
 ---
 
@@ -384,7 +389,7 @@ Checkpoints             # (cleaned after task)
 
 ## 🚀 Quick Start
 
-**1. Clone/Setup Project** → **2. Initialize Memory** → **3. Request Feature** → **4. Orchestration Auto-Triggers**
+**1. Clone/Setup Project** → **2. Initialize Project** → **3. Request Feature** → **4. Orchestration Auto-Triggers**
 
 ### Step 1: Setup
 
@@ -398,7 +403,27 @@ ls .claude/        # memory.md, skills/, agents/
 ls workflow/       # tests/, tmp/
 ```
 
-### Step 2: Initialize Memory (Optional)
+### Step 2: Initialize Project
+
+**Option A: Automated (Recommended)**
+
+Use `/init` command with your PRD:
+```bash
+/init path/to/product-requirements.md
+```
+
+This will:
+- **Analyze entire repository structure** (dirs, files, configs, dependencies, code patterns)
+- Analyze PRD and extract tech stack, features, constraints
+- **Cross-reference PRD with actual codebase** (flag discrepancies)
+- Populate `workflow/docs/` with API docs and best practices (from both PRD and real code)
+- Clean `workflow/tests/` (remove irrelevant, add project-specific patterns, seed with existing tests)
+- Update `memory.md` with project context (from both repo and PRD)
+- Propose core features for your approval (distinguish new vs enhancements)
+- Initialize orchestration structure (context-pool.json with actual paths and configs)
+- **Generate STATUS-REPORT.html** automatically with full project overview
+
+**Option B: Manual**
 
 Populate `.claude/memory.md` with:
 - Project type (chrome-extension, react, express, etc.)
