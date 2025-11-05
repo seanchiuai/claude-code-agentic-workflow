@@ -1,6 +1,6 @@
 # Generate Project Status Report
 
-Generate a comprehensive HTML status report saved to `/STATUS-REPORT.html`.
+Generate a comprehensive HTML status report saved to `workflow/STATUS-REPORT.html`.
 
 **Gather this information:**
 

@@ -110,7 +110,7 @@ Initialize project workspace from product requirement document. Sets up workflow
 ## Phase 5: Reporting
 
 **Deliverables:**
-1. STATUS-REPORT.html generated (dark mode, inline CSS, no external deps)
+1. workflow/STATUS-REPORT.html generated (dark mode, inline CSS, no external deps)
 2. Final summary presented to user
 
 **HTML sections:**
@@ -137,7 +137,7 @@ Initialize project workspace from product requirement document. Sets up workflow
 ✅ Markdown organization: [count] files processed
 ✅ Orchestration: Prepared (not executed)
 
-Next: "Ready to implement. View STATUS-REPORT.html. Request feature or say 'implement all'"
+Next: "Ready to implement. View workflow/STATUS-REPORT.html. Request feature or say 'implement all'"
 ```
 
 ---
@@ -163,7 +163,7 @@ Next: "Ready to implement. View STATUS-REPORT.html. Request feature or say 'impl
 - [ ] Phase 2: Features extracted, workflow/tmp/features.md created, changes reported, user asked
 - [ ] Phase 3: User agreement obtained (or max iterations), workflow/tmp/features.md updated if needed
 - [ ] Phase 4: Features stored, context-pool created, plans stubbed
-- [ ] Phase 5: STATUS-REPORT.html generated, final summary presented
+- [ ] Phase 5: workflow/STATUS-REPORT.html generated, final summary presented
 - [ ] All files use exact paths (workflow/docs/, workflow/tmp/, .claude/archive/)
 - [ ] Markdown organization complete (scattered files processed)
 - [ ] Dual source of truth (codebase + PRD synthesized)
