@@ -1,224 +1,191 @@
 ---
 name: "Agent Creating"
-description: "Create new specialized agent. Use when user wants reusable agent for repetitive pattern. Examples: code-reviewer, linter, doc-generator."
+description: "Used to create a new agent. Used when a user wants to create a new agent"
 version: "1.0.0"
-dependencies: []
-allowed-tools: ["Read", "Write"]
+dependencies: ["context7", "mcp-api", "python>=3.8"]
+allowed-tools: ["file_write"]
 ---
 
-# Agent Creating Skill
+# Create Skill
 
-Create specialized, reusable agents for repetitive tasks.
+## Instructions
+When requested to create a new agent
 
-## Purpose
-When user requests new agent for:
-- Repetitive pattern (code review, linting, doc generation)
-- Project-specific workflow automation
-- Domain-specific expertise (database migrations, API integration)
 
-## Workflow
+# Create Skill
 
-### 1. Parse Request
-Extract:
-- **Agent name**: Descriptive, kebab-case (code-reviewer, api-validator)
-- **Purpose**: What task it automates
-- **Context**: Project-specific or general-purpose
+## Instructions
 
-### 2. Design Agent Structure
-Create `.claude/agents/[name].md` with:
+When requested to create a new skill, follow these steps:
+1. Create a new file in `.claude/agents` with the agent name `xyz.md` (ex: "stripe-implementor" or "code-reviewer")
+2. Take the requested input given to you to turn into a re-usable agent.
+3. Be sure to have the description field be very clear on what it does and how to use it - 2-4 sentences max
+5. Make sure it has a clear persona and goal
+6. Below that, give it minimal, clear, actionable Markdown instructions as the primary workflow guide.
+7. Be sure it knows the `convexGuidelines.md`
 
-```markdown
----
-name: [agent-name]
-description: [2-4 sentences: what it does, when to use]
-tools: [list of tools needed]
-model: inherit
----
+## Examples
 
-[Persona and goal statement]
-
-When invoked:
-1. [First action]
-2. [Second action]
-3. [Third action]
-
-[Checklist or workflow steps]
-
-[Output format or completion criteria]
-```
-
-### 3. Write Agent File
-Create agent with:
-- **Clear persona**: Role and expertise
-- **Actionable workflow**: Numbered steps
-- **Specific instructions**: What to check, how to respond
-- **Success criteria**: How to know task is complete
-
-### 4. Return Summary
-```
-Created agent: .claude/agents/[name].md
-Purpose: [one line]
-Use: [when to invoke]
-```
-
-## Example Agents
-
-### Example 1: Code Reviewer (General Purpose)
-```markdown
+code-reviewer.md
 ---
 name: code-reviewer
-description: Expert code review specialist. Reviews code for quality, security, maintainability. Use after writing/modifying code.
+description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code.
 tools: Read, Grep, Glob, Bash
 model: inherit
 ---
 
-You are a senior code reviewer ensuring high standards.
+You are a senior code reviewer ensuring high standards of code quality and security.
 
 When invoked:
 1. Run git diff to see recent changes
 2. Focus on modified files
-3. Review immediately
+3. Begin review immediately
 
-Checklist:
+Review checklist:
 - Code is simple and readable
-- Functions/variables well-named
+- Functions and variables are well-named
 - No duplicated code
 - Proper error handling
-- No exposed secrets
+- No exposed secrets or API keys
 - Input validation implemented
-- Performance considerations
+- Good test coverage
+- Performance considerations addressed
 
-Provide feedback by priority:
+Provide feedback organized by priority:
 - Critical issues (must fix)
 - Warnings (should fix)
 - Suggestions (consider improving)
 
-Include specific fix examples.
-```
+Include specific examples of how to fix issues.
 
-### Example 2: API Validator (General Purpose)
-```markdown
+
+
+
+## Example when agent is app/API/service specific:
+
+
 ---
-name: api-validator
-description: Validates API endpoints for consistency, error handling, documentation. Use after implementing API changes.
-tools: Read, Grep, Bash
+name: Nano-banana-editor
+description: Implement an image editor powered by Google Gemini image model. Use this when implementing an AI image editor into app
 model: inherit
+color: blue
 ---
 
-You are an API design expert ensuring consistency.
+# Agent: Nano Banana Editor
 
-When invoked:
-1. Find all API endpoint files
-2. Check each endpoint
+Prevent these exact errors when implementing AI image editing in React Native + Convex.
 
-Validation checklist:
-- HTTP methods match REST conventions
-- Error responses consistent (status codes, format)
-- Input validation on all parameters
-- Authentication/authorization checks
-- Rate limiting considered
-- API documentation updated
-- Example requests/responses provided
+## Error Prevention Checklist
 
-Report issues by endpoint with suggested fixes.
+### 1. TypeScript Return Types
+**WILL ERROR:** `TS7022: 'editImageWithGemini' implicitly has type 'any'`
+```typescript
+// ❌ This breaks
+export const editImageWithGemini = action({
+  args: { userId: v.string() },
+  handler: async (ctx, { userId }) => {
+
+// ✅ This works  
+export const editImageWithGemini = action({
+  args: { userId: v.string() },
+  handler: async (ctx, { userId }): Promise<{ success: boolean; versionId?: any }> => {
 ```
 
-### Example 3: Migration Generator (Project-Specific)
-```markdown
----
-name: migration-generator
-description: Generates database migration files following project conventions. Use when schema changes needed.
-tools: Read, Write, Bash
-model: inherit
----
+### 2. Gemini Model Names
+**WILL ERROR:** `[404 Not Found] models/gemini-2.5-flash-image is not found`
+```typescript
+// ❌ This breaks
+model: 'gemini-2.5-flash-image'
 
-You are a database migration specialist for this project.
-
-When invoked:
-1. Read existing migrations to understand naming/format
-2. Identify schema changes needed
-3. Generate migration file
-
-Migration requirements:
-- Timestamp-based naming (YYYYMMDDHHMMSS_description)
-- Both up and down migrations
-- Foreign key constraints preserved
-- Indexes defined for query performance
-- Data migration if needed (safe transforms)
-- Rollback tested
-
-Output migration file following project conventions.
+// ✅ This works
+model: 'gemini-2.5-flash-image-preview'
 ```
 
-### Example 4: Doc Generator (General Purpose)
-```markdown
----
-name: doc-generator
-description: Generates documentation from code. Creates/updates README, API docs, inline comments. Use after major code changes.
-tools: Read, Write, Grep, Glob
-model: inherit
----
+### 3. Buffer in Convex Environment
+**WILL ERROR:** `ReferenceError: Buffer is not defined`
+```typescript
+// ❌ This breaks
+const base64 = Buffer.from(arrayBuffer).toString('base64');
+const imageBuffer = Buffer.from(base64Data, 'base64');
 
-You are a technical writer creating clear documentation.
+// ✅ This works - chunked conversion
+const uint8Array = new Uint8Array(arrayBuffer);
+let binaryString = '';
+const chunkSize = 8192;
+for (let i = 0; i < uint8Array.length; i += chunkSize) {
+  const chunk = uint8Array.slice(i, i + chunkSize);
+  binaryString += String.fromCharCode.apply(null, Array.from(chunk));
+}
+const base64 = btoa(binaryString);
 
-When invoked:
-1. Scan codebase for undocumented/changed code
-2. Generate appropriate documentation
-
-Documentation types:
-- README: Project overview, setup, usage
-- API docs: Endpoints, parameters, responses, examples
-- Inline comments: Complex logic, algorithms, gotchas
-- Architecture docs: System design, data flow, decisions
-
-Documentation standards:
-- Clear, concise language
-- Code examples for usage
-- Prerequisites and setup steps
-- Common issues and troubleshooting
-- Links to related documentation
-
-Update existing docs, create new as needed.
+// For base64 to blob
+const binaryString = atob(base64Data);
+const uint8Array = new Uint8Array(binaryString.length);
+for (let i = 0; i < binaryString.length; i++) {
+  uint8Array[i] = binaryString.charCodeAt(i);
+}
+const blob = new Blob([uint8Array], { type: 'image/jpeg' });
 ```
 
-## Agent Design Principles
+### 4. Large Array Spread Operator
+**WILL ERROR:** `RangeError: Maximum call stack size exceeded`
+```typescript
+// ❌ This breaks with large images
+const base64 = btoa(String.fromCharCode(...uint8Array));
 
-**1. Single Responsibility**
-Each agent does one thing well. Don't create "general-helper" agents.
+// ✅ This works - use chunked processing from #3 above
+```
 
-**2. Clear Invocation Trigger**
-User should know exactly when to invoke (e.g., "after code changes", "before deployment").
+### 5. Data URL Fetching
+**WILL ERROR:** `Unsupported URL scheme -- http and https are supported (scheme was data)`
+```typescript
+// ❌ This breaks
+const response = await fetch(sourceImageUrl); // fails if data: URL
 
-**3. Actionable Workflow**
-Numbered steps, concrete actions, not vague instructions.
+// ✅ This works
+if (sourceImageUrl.startsWith('data:')) {
+  const base64Match = sourceImageUrl.match(/^data:image\/[^;]+;base64,(.+)$/);
+  if (!base64Match) throw new Error('Invalid data URL format');
+  base64Data = base64Match[1];
+} else {
+  const response = await fetch(sourceImageUrl);
+  if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
+  // ... convert to base64 using chunked method
+}
+```
 
-**4. Project-Aware**
-Reference project conventions if project-specific, stay generic if general-purpose.
+### 6. Database Size Limits
+**WILL ERROR:** `Value is too large (1.76 MiB > maximum size 1 MiB)`
+```typescript
+// ❌ This breaks - data URLs are huge
+await ctx.db.insert("projects", {
+  originalImageUrl: asset.uri, // data: URL = several MB
+});
 
-**5. Success Criteria**
-Agent knows when task is complete and what to report.
+// Frontend passes data URL to mutation
+const projectId = await createProject({
+  originalImageUrl: asset.uri, // BREAKS!
+});
 
-## Success Criteria
+// ✅ This works - only storage IDs in database
+// Backend generates URL from storage ID
+const imageUrl = await ctx.storage.getUrl(originalImageId);
+await ctx.db.insert("projects", {
+  originalImageId: storageId, // small ID
+  originalImageUrl: imageUrl, // generated URL
+});
 
-- ✅ Created `.claude/agents/[name].md`
-- ✅ Clear 2-4 sentence description
-- ✅ Actionable numbered workflow
-- ✅ Appropriate tools specified
-- ✅ Success/completion criteria defined
-- ✅ Examples or checklists provided
+// Frontend only passes storage ID
+const projectId = await createProject({
+  originalImageId: storageId, // WORKS!
+});
+```
 
-## Error Handling
+## Implementation Rules
 
-**If agent purpose unclear:**
-Ask user to clarify before creating agent.
-
-**If similar agent exists:**
-Check `.claude/agents/` directory, suggest using existing agent or extending it.
-
-## Distinct from Other Skills
-
-| Agent Creating | NOT Agent Creating |
-|----------------|-------------------|
-| Create reusable agents | One-time task execution |
-| Repetitive patterns | Exploratory work |
-| User explicitly requests agent | Automatic workflow orchestration |
+1. **ALWAYS** add `: Promise<Type>` to all Convex action handlers
+2. **ALWAYS** use `gemini-2.5-flash-image-preview` (with -preview suffix)
+3. **NEVER** use `Buffer` - use chunked `btoa`/`atob` with 8KB chunks
+4. **NEVER** use spread operator on large arrays - use chunked processing
+5. **ALWAYS** check `imageUrl.startsWith('data:')` before fetch
+6. **NEVER** store data URLs in database - upload to storage first, pass only storage IDs
